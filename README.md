@@ -1,4 +1,4 @@
-# Whiteboard App
+# Whiteboard Fe
 
 一个基于 Vue 3 + TypeScript + Vite 构建的在线白板应用。
 
