@@ -2,7 +2,7 @@
 
 一个基于 Vue 3 + TypeScript + Vite 构建的在线白板应用。
 
-![preview](//qn11.tool.lu/202411/27/215303sucvFzVLflDnTLl9_3584x1857.png)
+![preview](https://qn11.tool.lu/202411/27/215303sucvFzVLflDnTLl9_3584x1857.png)
 
 ## 功能特点
 
