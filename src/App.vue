@@ -7,9 +7,10 @@
       :current-page="currentPage"
     />
 
-    <!-- 底部工具条 -->
+    <!-- 工具条 -->
     <div
-      class="toolbar fixed bottom-0 left-0 right-0 h-20 bg-white border-t border-gray-200 px-4 flex items-center justify-between"
+      class="toolbar fixed left-0 right-0 h-20 bg-white px-4 flex items-center justify-between"
+      :class="toolbarPosition === 'top' ? 'top-0 border-b' : 'bottom-0 border-t'"
     >
       <!-- 左侧页面控制 -->
       <PageControls
@@ -34,24 +35,42 @@
         />
       </div>
     </div>
+
+    <!-- 设置弹窗 -->
+    <SettingsModal
+      v-model="showSettings"
+      :toolbar-position="toolbarPosition"
+      @update:toolbar-position="updateToolbarPosition"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import WhiteboardCanvas from "./components/WhiteboardCanvas.vue";
 import PageControls from "./components/PageControls.vue";
 import ColorPicker from "./components/ColorPicker.vue";
 import ToolBar from "./components/ToolBar.vue";
+import SettingsModal from "./components/SettingsModal.vue";
 
 const canvas = ref<InstanceType<typeof WhiteboardCanvas> | null>(null);
 const currentTool = ref("pen");
 const currentColor = ref("#000000");
 const currentPage = ref(1);
 const totalPages = ref(1);
+const showSettings = ref(false);
+const toolbarPosition = ref<"top" | "bottom">("bottom");
 
 const canUndo = computed(() => canvas.value?.canUndo() ?? false);
 const canRedo = computed(() => canvas.value?.canRedo() ?? false);
+
+// 从 localStorage 加载设置
+onMounted(() => {
+  const savedPosition = localStorage.getItem("toolbarPosition");
+  if (savedPosition === "top" || savedPosition === "bottom") {
+    toolbarPosition.value = savedPosition;
+  }
+});
 
 const undo = () => {
   canvas.value?.undo();
@@ -67,7 +86,12 @@ const addPage = () => {
 };
 
 const openSettings = () => {
-  console.log("open settings");
+  showSettings.value = true;
+};
+
+const updateToolbarPosition = (position: "top" | "bottom") => {
+  toolbarPosition.value = position;
+  localStorage.setItem("toolbarPosition", position);
 };
 
 const exit = () => {
